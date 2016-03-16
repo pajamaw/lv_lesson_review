@@ -3,11 +3,17 @@ require 'mechanize'
 
 class LessonsScraper
 
-  def agent
-    Mechanize.new
+  def run
+    get_page
+    get_info_blocks
+    get_category_and_lesson_titles
   end
 
-  def page
+  def agent
+    agent = Mechanize.new
+  end
+
+  def get_page
     page = agent.get('http://www.learn.co/pajamaw.html')
   end
 
@@ -23,34 +29,32 @@ class LessonsScraper
     page.search('div[data-topic-slug] tr.lesson').collect{|lesson| lesson.text} 
   end
 
-  def each_block
-    
-    agent = Mechanize.new
+  def get_info_blocks
+    info = get_page.search('div[data-topic-slug]')
+  end
 
-    page = agent.get('http://www.learn.co/pajamaw.html')
-
-    info = page.search('div[data-topic-slug]')
-
-
-info.each do |lesson_block|
-    if lesson_block.css('div div h3').text != ""
-      @category = Category.new(title: lesson_block.css('div div h3').text)
-      puts @category
-      lesson_block.css('tr.lesson').each do |lesson|
-        @lesson = Lesson.new(title: lesson.text)
-          @lesson.category_id = @category.id
-          @category.lessons << @lesson
-          @category.save
-          @lesson.save
-        end
+  def get_category_and_lesson_titles
+    get_info_blocks.each do |lesson_block|
+      if lesson_block.css('div div h3').text != ""
+        @category = Category.new(title: lesson_block.css('div div h3').text)
+        lesson_block.css('tr.lesson').each do |lesson|
+          @lesson = Lesson.new(title: lesson.text)
+            @lesson.category_id = @category.id
+            @category.lessons << @lesson
+            @category.save
+            @lesson.save
+          end
       end
     end
   end
+
 end
 
-info.each do |lesson_block|
+    #agent = Mechanize.new
 
-    lesson_block.css('tr.lesson').each do |lesson|
-      puts lesson.text
-    end
-  end
+    #page = agent.get('http://www.learn.co/pajamaw.html')
+
+    #info = page.search('div[data-topic-slug]')
+
+
+

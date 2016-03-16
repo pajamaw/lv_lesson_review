@@ -1,6 +1,6 @@
 <h3>Lessons</h3>
   <ol>
   <%@lessons.each do |lesson| %>
-      <li><%= link_to lesson.title, lesson_path(lesson) %></li><br />
+      <li><%= link_to lesson.parse_title, lesson_path(lesson) %></li><br />
     <%end%>
   </ol>
