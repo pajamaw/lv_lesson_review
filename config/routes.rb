@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :categories
   post '/add_comment' => "comments#create"
+  post '/add_rating' => "ratings#create"
   resources :lessons
   resources :ratings
   resources :comments
