@@ -3,10 +3,7 @@ Rails.application.routes.draw do
   resources :lessons, only: [:show, :index] do
     resources :comments, only: [:show, :index, :new, :edit]
   end
-  post '/add_comment' => "comments#create"
-
   resources :lessons
-  post '/comments' => "comments#update"
   post '/add_rating' => "ratings#create"
 
   resources :ratings

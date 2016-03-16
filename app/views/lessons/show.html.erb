@@ -30,18 +30,19 @@
             <h4>Comments on the Lab</h4>
             <%if @lesson.comments.count == 0%>
             <%="There are no comments on this lesson. Be the first one!"%><br />
+
               <%else%>
             <% @lesson.comments.each do |comment|%>
               <li>Written on <%=comment.created_at.strftime('%A, %b %d, %Y')%> |  <%=comment.user.email%> |<br /> <%=link_to comment.content, comment_path(comment)%></li><br /><br />
              
               <%end%>
               <%end%>
+              <h4><%=link_to "Add a comment", new_lesson_comment_path(@lesson)%></h4>
 
-
-            <%= form_tag(new_lesson_comment_path) do %>
-            <%= text_area_tag :content%>
-            <%= hidden_field_tag "lesson_id", @lesson.id%>
-            <%= submit_tag "Add Comment" %>
-              <% end %>
+            <%#= form_tag(new_lesson_comment_path) do %>
+            <%#= text_area_tag :content%>
+            <%#= hidden_field_tag "lesson_id", @lesson.id%>
+            <%#= submit_tag "Add Comment" %>
+              <% #end %>
             </ul>
           </div><br />
