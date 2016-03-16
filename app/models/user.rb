@@ -6,7 +6,6 @@ class User < ActiveRecord::Base
   has_many :comments
   has_many :ratings #going to have ratings on comments and lessons,  
                     #therefore users will also have ratings through their comments
-
   def self.from_omniauth(auth)  
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
       user.provider = auth.provider
