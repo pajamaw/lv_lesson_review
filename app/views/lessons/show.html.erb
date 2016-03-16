@@ -2,7 +2,7 @@
   <% num = @ratings.count%>
   <div>
     <ul>
-    <h4> AverageStar Difficulty!</h4>
+    <h4> Average Star Difficulty!</h4>
 
     <%if num ==0%>
       <%="There are currently no ratings on this lesson!"%>
@@ -32,13 +32,13 @@
             <%="There are no comments on this lesson. Be the first one!"%><br />
               <%else%>
             <% @lesson.comments.each do |comment|%>
-              <li>Written by User # <%=comment.user_id%>: <%=comment.content%></li><br /><br />
-              <!--Until you figure out why devise is hiding the email just use the user_id for verification-->
+              <li>Written on <%=comment.created_at.strftime('%A, %b %d, %Y')%> |  <%=comment.user.email%> |<br /> <%=link_to comment.content, comment_path(comment)%></li><br /><br />
+             
               <%end%>
               <%end%>
 
 
-            <%= form_tag(add_comment_path) do %>
+            <%= form_tag(new_lesson_comment_path) do %>
             <%= text_area_tag :content%>
             <%= hidden_field_tag "lesson_id", @lesson.id%>
             <%= submit_tag "Add Comment" %>

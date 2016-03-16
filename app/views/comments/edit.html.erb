@@ -1,0 +1,4 @@
+<%= form_tag(comment_path) do %>
+  <%= text_area_tag :content, @comment.content %>
+  <%= submit_tag "Edit Comment", method: :patch %>
+    <% end %>
