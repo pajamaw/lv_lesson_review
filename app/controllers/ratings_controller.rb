@@ -6,6 +6,11 @@ class RatingsController < ApplicationController
     #flash[:notice] = "Rating Added"
     #redirect_to lesson_path(@lesson)
   #end
+  def index
+    @lesson = Lesson.find(params[:lesson_id])
+    @ratings = @lesson.ratings
+    render template: 'ratings/index'
+  end
 
    def new
     if params[:lesson_id] && !Lesson.exists?(params[:lesson_id])
@@ -13,7 +18,7 @@ class RatingsController < ApplicationController
       redirect_to lessons_path
     else
       @user = User.find_by(id: current_user)
-      @rating = Rating.new(ratable_type: 'Lesson', ratable_id: params[:lesson_id], user_id: @user.id)
+      @rating = Rating.new(lesson_id: params[:lesson_id], user_id: @user.id)
     end
   end
 
@@ -56,7 +61,7 @@ class RatingsController < ApplicationController
   private
 
   def rating_params
-    params.require(:rating).permit(:star_rating, :ratable_id, :ratable_type, :user_id)
+    params.require(:rating).permit(:star_rating, :lesson_id, :user_id)
   end
 end
-end
+

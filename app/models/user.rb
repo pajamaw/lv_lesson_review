@@ -7,8 +7,8 @@ class User < ActiveRecord::Base
   has_many :ratings
   has_many :rated_lessons, through: :ratings,
             source: :ratable, source_type: 'Lesson'
-  has_many :rated_comments, through: :ratings,
-            source: :ratable, source_type: 'Comment' #going to have ratings on comments and lessons,  
+  #has_many :rated_comments, through: :ratings,
+            #source: :ratable, source_type: 'Comment' #going to have ratings on comments and lessons,  
                     #therefore users will also have ratings through their comments
 
   def self.from_omniauth(auth)  

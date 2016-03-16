@@ -5,6 +5,5 @@ class LessonsController < ApplicationController
 
   def show
     @lesson = Lesson.find_by(id: params[:id])
-    @ratings = @lesson.ratings
   end
 end

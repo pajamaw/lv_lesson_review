@@ -1,0 +1,6 @@
+   <%= form_for(@rating) do |f|%>
+  | 1 <%= f.radio_button :star_rating, "1"%> | 2 <%= f.radio_button :star_rating, "2"%> | 3 <%= f.radio_button :star_rating, "3"%> | 4 <%= f.radio_button :star_rating, "4"%> | 5 <%= f.radio_button :star_rating, "5"%> |
+  <%= f.hidden_field :lesson_id%>
+  <%= f.hidden_field :user_id%>
+  <%= f.submit  %>
+  <%end%>

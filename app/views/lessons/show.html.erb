@@ -4,8 +4,15 @@
             <div>
               <ul>
               <h4>Difficulty!</h4>
-                <h5><%=Rating.average(@ratings)%> out of 5.0</h5>
+              <%if @lesson.ratings.count == 0%>
+            <%="There are no ratings on this lesson. Be the first one!"%><br />
+
+              <%else%>
+                <h5><%=Rating.average(@lesson.ratings)%> out of 5.0</h5>
+                <%end%>
+                <%=link_to "Add Rating", new_lesson_rating_path(@lesson)%>
               </ul>
+              <h4><%=link_to "See all Ratings", lesson_ratings_path(@lesson)%></h4>
 
           <ul>
             <h4>Comments on the Lab</h4>
@@ -14,7 +21,7 @@
 
               <%else%>
             <% @lesson.comments.each do |comment|%>
-              <li>Written on <%=comment.created_at.strftime('%A, %b %d, %Y')%> |  <%=comment.user.email%> |<br /> <%=link_to comment.content, comment_path(comment)%></li><br /><br />
+              <li>Written on <%=comment.created_at.strftime('%A, %b %d, %Y')%> |  <%=comment.user.email%> |<br /> <%=link_to comment.content, lesson_comment_path(comment.lesson, comment)%></li><br /><br />
              
               <%end%>
               <%end%>

@@ -1,0 +1,11 @@
+<h3> <%=link_to @lesson.title, lesson_path(@lesson)%></h3>
+<h4>Average Difficulty: <%=Rating.average(@ratings)%>
+<br />
+<h5>Based on the input from <%=@ratings.count%> people</h5>
+<%@ratings.each do |rating| %>
+<ol>
+  <li><%=rating.user.email%> - <%=rating.star_rating%> || <%=link_to "Details", lesson_rating_path(@lesson, rating)%></li>
+  <%end%>
+</ol>
+
+<%=link_to "Add Rating", new_lesson_rating_path(@rating.lesson, @rating)%>

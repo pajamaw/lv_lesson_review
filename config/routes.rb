@@ -2,12 +2,11 @@ Rails.application.routes.draw do
   resources :categories
   resources :lessons, only: [:show, :index] do
     resources :comments, only: [:show, :index, :new, :edit]
+    resources :ratings, only: [:show, :index, :new, :edit]
   end
-  resources :lessons
-  post '/add_rating' => "ratings#create"
-
-  resources :ratings
   resources :comments
+  resources :ratings
+  resources :lessons
   devise_for :users, :controllers => {:omniauth_callbacks => "callbacks"}
   root 'welcome#home'
   # The priority is based upon order of creation: first created -> highest priority.
