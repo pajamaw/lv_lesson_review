@@ -1,11 +1,5 @@
 class RatingsController < ApplicationController
-  #def create
-    #@user = User.find_by(id: current_user)
-    #@lesson = Lesson.find_by(id: params[:lesson_id])
-    #@rating= Rating.create(user_id: @user.id, ratable_type: 'Lesson', ratable_id: params[:lesson_id], star_rating: params[:star_rating])
-    #flash[:notice] = "Rating Added"
-    #redirect_to lesson_path(@lesson)
-  #end
+
   def index
     @lesson = Lesson.find(params[:lesson_id])
     @ratings = @lesson.ratings
@@ -56,6 +50,13 @@ class RatingsController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def destroy
+    @rating = Rating.find(params[:id])
+    @rating.destroy
+    flash[:notice] = "Rating deleted."
+    redirect_to lessons_path
   end
 
   private

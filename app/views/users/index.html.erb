@@ -1,0 +1,14 @@
+<h3>All users</h3>
+  <ol>
+
+<%@users.each do |user|%>
+    <li>
+      <ul><%=user.email%></ul>
+      <ul><%=link_to "Profile Page", user_path(user)%></ul>
+      <ul>Number of Ratings: <%=user.ratings.count%></ul>
+      <ul>Number of Comments: <%=user.comments.count%></ul>
+      <ul>Status: <%=user.role%></ul>
+    </li><br />
+    <%end%>
+
+  </ol>

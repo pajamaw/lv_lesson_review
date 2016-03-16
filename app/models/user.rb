@@ -5,12 +5,11 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
   has_many :comments #, as: :commenter
   has_many :ratings
-  has_many :rated_lessons, through: :ratings,
-            source: :ratable, source_type: 'Lesson'
+  has_many :rated_lessons, through: :ratings
   #has_many :rated_comments, through: :ratings,
             #source: :ratable, source_type: 'Comment' #going to have ratings on comments and lessons,  
                     #therefore users will also have ratings through their comments
-
+  enum role: [:ban, :member, :deity]
   def self.from_omniauth(auth)  
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
       user.provider = auth.provider

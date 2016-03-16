@@ -1,4 +1,6 @@
+
 source 'https://rubygems.org'
+gem 'pundit'
 gem 'pry'
 gem 'mechanize'
 gem 'nokogiri'

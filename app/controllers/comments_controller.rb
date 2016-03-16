@@ -46,6 +46,13 @@ class CommentsController < ApplicationController
     end
   end
 
+  def destroy
+    @comment = Comment.find(params[:id])
+    @comment.destroy
+    flash[:notice] = "Comment deleted."
+    redirect_to lessons_path
+  end
+
   private
 
   def comment_params
