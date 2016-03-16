@@ -1,0 +1,22 @@
+  <% num = @ratings.count%>
+  <div>
+    <ul>
+    <h4> Average Star Difficulty!</h4>
+
+    <%if num ==0%>
+      <%="There are currently no ratings on this lesson!"%>
+      <%else%>
+      <%=Rating.average(@ratings)%>
+        <%end%>
+      <br />
+    </div>
+      <div>
+        <ul>
+        <p>Add a rating of your own?</p>
+          <%= form_tag(add_rating_path) do %>
+          | 1. <%= radio_button_tag 'star_rating', "1", class: "Rating"%> | 2. <%= radio_button_tag 'star_rating', "2", class: "Rating"%> | 3. <%= radio_button_tag 'star_rating', "3", class: "Rating"%> | 4. <%= radio_button_tag 'star_rating', "4", class: "Rating"%> | 5. <%= radio_button_tag 'star_rating', "5", class: "Rating"%> |
+          <%= hidden_field_tag "lesson_id", @lesson.id%>
+          <%= submit_tag "Add Rating" %>
+          <%end%>
+        </ul>
+        </div><br />

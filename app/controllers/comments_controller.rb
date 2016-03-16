@@ -11,9 +11,6 @@ class CommentsController < ApplicationController
   end
 
   def create
-    #@comment = Comment.new(user_id: @user.id)
-    #if @comment.save
-   
     @comment = Comment.create(comment_params)
     flash[:notice] = "Comment Added"
     redirect_to comment_path(@comment)
