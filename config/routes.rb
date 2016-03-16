@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
+  resources :categories
+  post '/add_comment' => "comments#create"
+  resources :lessons
   resources :ratings
   resources :comments
-  resources :categories
-  resources :lessons
   resources :items
   devise_for :users, :controllers => {:omniauth_callbacks => "callbacks"}
   root 'welcome#home'

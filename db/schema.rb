@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160316031943) do
+ActiveRecord::Schema.define(version: 20160316051334) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "title"
@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20160316031943) do
   end
 
   create_table "comments", force: :cascade do |t|
-    t.text     "content"
+    t.string   "content"
     t.integer  "lesson_id"
     t.integer  "user_id"
     t.datetime "created_at", null: false
@@ -32,6 +32,14 @@ ActiveRecord::Schema.define(version: 20160316031943) do
     t.integer  "category_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+  end
+
+  create_table "ratings", force: :cascade do |t|
+    t.integer  "star_rating"
+    t.integer  "ratable_id"
+    t.string   "ratable_type"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "users", force: :cascade do |t|
