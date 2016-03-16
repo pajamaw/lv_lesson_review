@@ -4,7 +4,11 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
   has_many :comments
-  has_many :ratings #going to have ratings on comments and lessons,  
+  has_many :ratings
+  has_many :rated_lessons, through: :ratings,
+            source: :ratable, source_type: 'Lesson'
+  has_many :rated_comments, through: :ratings,
+            source: :ratable, source_type: 'Comment' #going to have ratings on comments and lessons,  
                     #therefore users will also have ratings through their comments
   def self.from_omniauth(auth)  
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
