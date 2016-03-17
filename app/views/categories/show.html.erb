@@ -1,7 +1,14 @@
 <h3><%= @category.title %></h3>
+  <% if @category.ratings.count != 0 %>
+  <h4> - Average Rating - 
+    <%=Rating.average(@category.ratings)%></h4>
+    <%else%>
+      <%="This category's lessons have yet to be rated"%></ul>
+      <%end%>
 
 <ol>
 <% @category.lessons.each do |lesson| %>
     <li><%= link_to lesson.parse_title, lesson_path(lesson) %></li><br />
 <% end %>
 </ol>
+    <%= link_to 'Back', url_for(:back) %>

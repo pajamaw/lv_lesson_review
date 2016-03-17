@@ -2,3 +2,4 @@
 <li><%=@comment.content%><br />Written on <%=@comment.created_at.strftime('%A, %b %d, %Y')%> |  <%= @comment.user.email %> | </li><br /><br />
 <%=link_to "Edit Comment", edit_lesson_comment_path(@comment.lesson, @comment)%><br />
   <%= button_to "Delete", comment_path(@comment), method: :delete %>
+    <%= link_to 'Back', url_for(:back) %>
