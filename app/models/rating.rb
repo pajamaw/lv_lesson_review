@@ -12,4 +12,6 @@ class Rating < ActiveRecord::Base
       end
       average = total / array.count
     end
+
+
 end

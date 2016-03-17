@@ -7,11 +7,14 @@ class RatingsController < ApplicationController
   end
 
    def new
-    if logged_in?
+    if logged_in? 
 
       if params[:lesson_id] && !Lesson.exists?(params[:lesson_id])
         flash[:notice] = "Lesson not found."
         redirect_to lessons_path
+      #elsif Rating.users_only_comment?(Lesson.find_by(id: params[:lesson_id]))
+        #flash[:notice] = "Lesson not found."
+
       else
         @user = User.find_by(id: current_user)
         @rating = Rating.new(lesson_id: params[:lesson_id], user_id: @user.id)

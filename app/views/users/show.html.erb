@@ -1,4 +1,7 @@
-<h3>Profile of <%=@user.email%> the <%=@user.role%></h3>
+<h3>Profile: <%=@user.email%></h3>
+<h4>Status: <%=@user.role%></h3>
+<br />
+
   <h4>All Comments</h4>
     <ol>
         <% @user.comments.each do |comment|%>
@@ -23,6 +26,6 @@
       </li>
     <%end%>
   </ol>
-
+<br />
   <%= button_to "Delete Profile and all Traces of Existence", user_path(@user), method: :delete%>
     <%= link_to 'Back', url_for(:back) %>

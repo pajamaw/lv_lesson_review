@@ -4,7 +4,5 @@ class Comment < ActiveRecord::Base
   #has_many :ratings, as: :ratable
 
 
-  def self.owner
-    @user = User.find_by(id: self.user_id)
-  end
+
 end

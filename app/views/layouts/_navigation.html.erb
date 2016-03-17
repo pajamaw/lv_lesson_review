@@ -62,6 +62,10 @@
           <ul class="dropdown-menu" role="menu">
             <% if !!current_user %>
             <li >
+              Signed in: <%=link_to current_user.email,  user_path(current_user) %>
+            </li>
+
+            <li >
               <%=link_to 'Logout', destroy_user_session_path, method: :delete %>
             </li>
             <%else%>

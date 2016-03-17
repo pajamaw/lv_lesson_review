@@ -6,7 +6,7 @@ class RatingPolicy <ApplicationPolicy
   end
 
   def create?
-    user.deity? or user.member?
+    user.deity? or user.member? 
   end
 
   def update?

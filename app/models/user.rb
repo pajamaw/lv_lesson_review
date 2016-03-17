@@ -18,5 +18,9 @@ class User < ActiveRecord::Base
       user.password = Devise.friendly_token[0,20]
     end
   end
+
+    def self.users_only_rating?
+      ratings.where('lesson_id != ?', params[:lesson_id])
+    end
 end       
 
