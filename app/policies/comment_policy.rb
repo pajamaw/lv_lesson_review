@@ -1,12 +1,20 @@
 class CommentPolicy <ApplicationPolicy
-  attr_reader :user, :comment
+  attr_reader :user, :record
 
-  def initialize(user, comment)
+  def initialize(user, record)
     @user = user
-    @comment = comment
+    @record = record
   end
 
   def create?
-    user.deity? or not comment.published?
+    user.deity? or user.member?
+  end
+
+  def update?
+    user.deity? or record.user_id == user.id
+  end
+
+  def destroy?
+    user.deity? or record.user_id == user.id
   end
 end

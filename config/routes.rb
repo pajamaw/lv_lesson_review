@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     resources :comments, only: [:show, :index, :new, :edit]
     resources :ratings, only: [:show, :index, :new, :edit]
   end
+  delete '/comments' => 'comments#destroy'
   resources :comments
   resources :ratings
   resources :lessons

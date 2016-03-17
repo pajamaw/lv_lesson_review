@@ -1,31 +1,48 @@
 require 'pry'
 class CommentsController < ApplicationController
   def new
-    if params[:lesson_id] && !Lesson.exists?(params[:lesson_id])
-      flash[:notice] = "Lesson not found."
-      redirect_to lessons_path
+    if logged_in?
+
+      if params[:lesson_id] && !Lesson.exists?(params[:lesson_id])
+        flash[:notice] = "Lesson not found."
+        redirect_to lessons_path
+      else
+        @user = User.find_by(id: current_user)
+        @comment = Comment.new(lesson_id: params[:lesson_id], user_id: @user.id)
+      end
     else
-      @user = User.find_by(id: current_user)
-      @comment = Comment.new(lesson_id: params[:lesson_id], user_id: @user.id)
-    end
+      flash[:alert] = "You must log in to create comments"
+      redirect_to(request.referrer || root_path)
+    end 
   end
 
   def create
-    @comment = Comment.create(comment_params)
-    flash[:notice] = "Comment Added"
-    redirect_to comment_path(@comment)
+    if logged_in?
+      @comment = Comment.create(comment_params)
+      authorize @comment
+      flash[:notice] = "Comment Added"
+      redirect_to comment_path(@comment)
+    else
+      flash[:alert] = "You must log in to create comments"
+      redirect_to(request.referrer || root_path)
+    end
   end
 
   def edit
-    if params[:lesson_id]
-      lesson = Lesson.find_by(id: params[:lesson_id])
-      if lesson.nil?
-        flash[:notice] = "Lesson not found"
-        redirect_to lessons_path
-      else
-        @comment = lesson.comments.find_by(id: params[:id])
+    if logged_in?
+      if params[:lesson_id]
+        lesson = Lesson.find_by(id: params[:lesson_id])
+        if lesson.nil?
+          flash[:notice] = "Lesson not found"
+          redirect_to lessons_path
+        else
+          @comment = lesson.comments.find_by(id: params[:id])
+        end
+      @comment = Comment.find_by(id: params[:id])
       end
-    @comment = Comment.find_by(id: params[:id])
+    else
+      flash[:alert] = "You must log in to update comments"
+      redirect_to(request.referrer || root_path)
     end
   end
 
@@ -36,21 +53,33 @@ class CommentsController < ApplicationController
   end
 
   def update
-    @comment = Comment.find_by(id: params[:id])
-    @comment.update(comment_params)
-    if @comment.save
-      flash[:notice] = "Comment Updated"
-      redirect_to comment_path(@comment)
+    if logged_in?
+      @comment = Comment.find_by(id: params[:id])
+      authorize @comment
+      @comment.update(comment_params)
+      if @comment.save
+        flash[:notice] = "Comment Updated"
+        redirect_to comment_path(@comment)
+      else
+        render :edit
+      end
     else
-      render :edit
+      flash[:alert] = "You must log in to update comments"
+      redirect_to(request.referrer || root_path)
     end
   end
 
   def destroy
-    @comment = Comment.find(params[:id])
-    @comment.destroy
-    flash[:notice] = "Comment deleted."
-    redirect_to lessons_path
+    if logged_in?
+      @comment = Comment.find(params[:id])
+      authorize @comment
+      @comment.destroy
+      flash[:notice] = "Comment deleted."
+      redirect_to lessons_path
+    else
+      flash[:alert] = "You must log in to delete comments"
+      redirect_to(request.referrer || root_path)
+    end
   end
 
   private

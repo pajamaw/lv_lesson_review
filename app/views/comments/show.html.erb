@@ -1,3 +1,4 @@
-<h3> <%=link_to @comment.lesson.title, lesson_path(@comment.lesson)%></h3>
-<li>Written on <%=@comment.created_at.strftime('%A, %b %d, %Y')%> |  <%= @comment.user.email %> |<br /> <%=@comment.content%></li><br /><br />
-<%=link_to "Edit Comment", edit_lesson_comment_path(@comment.lesson, @comment)%>
+<h3> <%=link_to @comment.lesson.parse_title, lesson_path(@comment.lesson)%></h3>
+<li><%=@comment.content%><br />Written on <%=@comment.created_at.strftime('%A, %b %d, %Y')%> |  <%= @comment.user.email %> | </li><br /><br />
+<%=link_to "Edit Comment", edit_lesson_comment_path(@comment.lesson, @comment)%><br />
+  <%= button_to "Delete", comment_path(@comment), method: :delete %>
