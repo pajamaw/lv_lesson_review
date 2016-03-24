@@ -21,9 +21,18 @@ class User < ActiveRecord::Base
     end
   end
 
-    def self.users_only_rating?
+    def users_only_rating?
       self.ratings.where('lesson_id != ?', params[:lesson_id])
     end
+
+  def average
+    average = 0
+    total = 0
+    self.ratings.each do |num|
+      total += num.star_rating.to_f
+      end
+    average = total / self.ratings.count
+  end
 
 
 end       

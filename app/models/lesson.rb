@@ -8,15 +8,23 @@ class Lesson < ActiveRecord::Base
   def parse_title
     #if self.title.match(/(\-)/)
       #self.title = self.title.gsub("-", "")######(/^[\w+\s+\w]*/)
-    if self.title.match(/(\d)/) || self.title.match(/(-)/)
-       self.title.gsub("-", "").match(/^\D+/)
+    if title.match(/(\d)/) || title.match(/(-)/)
+       title.gsub("-", "").match(/^\D+/)
        ##not going to change titles until i know what information i want
        ##on here
     else
-      self.title
+      title
     end
   end
 
+  def average
+    average = 0
+    total = 0
+    self.ratings.each do |num|
+      total += num.star_rating.to_f
+      end
+      average = total / self.ratings.count
+  end
 
 
    
