@@ -1,17 +1,18 @@
 Rails.application.routes.draw do
-  resources :categories
+  root 'welcome#home'
+
+  resources :categories, only: [:show, :index]
+  resources :lessons, only: [:show, :index]
   resources :lessons, only: [:show, :index] do
     resources :comments, only: [:show, :index, :new, :edit]
     resources :ratings, only: [:show, :index, :new, :edit]
   end
-  delete '/comments' => 'comments#destroy'
-  resources :comments
   resources :ratings
-  resources :lessons
+  resources :comments
+  delete '/comments' => 'comments#destroy'
   devise_for :users, :controllers => {:omniauth_callbacks => "callbacks"}
   resources :users
 
-  root 'welcome#home'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

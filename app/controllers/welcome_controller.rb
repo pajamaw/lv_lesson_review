@@ -1,8 +1,7 @@
 class WelcomeController <ApplicationController
+  ##skip_before_action :require_login, only: [:home]
+
   def home
-    if !!current_user
-      @categories = Category.all
-      redirect_to categories_path
-    end
+
   end
 end

@@ -50,6 +50,7 @@ class LessonsScraper
 
 end
 
+
     #agent = Mechanize.new
 
     #page = agent.get('http://www.learn.co/pajamaw.html')

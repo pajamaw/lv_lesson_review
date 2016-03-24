@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   #has_many :rated_comments, through: :ratings,
             #source: :ratable, source_type: 'Comment' #going to have ratings on comments and lessons,  
                     #therefore users will also have ratings through their comments
-  enum role: [:ban, :member, :deity]
+  enum role: [:member, :vip, :admin]
   def self.from_omniauth(auth)  
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
       user.provider = auth.provider

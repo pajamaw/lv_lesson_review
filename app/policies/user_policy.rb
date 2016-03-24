@@ -1,31 +1,20 @@
 class UserPolicy < ApplicationPolicy
-
-  class Scope
-    attr_reader :user, :scope
-    def initialize(user, scope)
-      @user = user
-      @scope = scope
-    end
-
-    def resolve
-      if user
-        if user.deity?
-          @scope.all
-        else
-          @scope.all.where(user_id: user.id)
-        end
-      end
-    end
-  end
+  attr_reader :user, :record
 
   def index?
-    user.deity?
+    user.admin?
   end
 
+  def update?
+    user.admin?
+  end
 
+  def show?
+    user.admin? or user.vip? or record.id == user.id
+  end
 
   def destroy?
-    user.deity? or record.id == user.id
+    user.admin? or record.id == user.id
   end
 end
 

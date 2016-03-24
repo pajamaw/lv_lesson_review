@@ -1,41 +1,47 @@
 class UsersController <ApplicationController
-    # Prevent CSRF attacks by raising an exception.
-
+  before_filter :require_login
+  
   def index
-    if logged_in? && current_user.deity?
-      @users = User.all
-    else
-      flash[:alert] = "Not authorized"
-      redirect_to(request.referrer || root_path)
-    end
+    @user = User.find_by(id: current_user.id)
+    authorize @user
+    @users = User.all
+    #else
+     # #flash[:alert] = "Not authorized"
+      #redirect_to(request.referrer || root_path)
+   # end
   end
 
   def show
-    if logged_in?
+    if User.find_by(id: params[:id])
       @user = User.find_by(id: params[:id])
+      authorize @user
     else
-     flash[:alert] = "Not authorized"
-     redirect_to(request.referrer || root_path)
-   end
-
+      flash[:notice] = "User not found."
+      redirect_to root_path  
+    end
   end
 
-  def destroy
+  def edit
     @user = User.find_by(id: params[:id])
-    if logged_in? && (current_user.deity? || @user == current_user)
-      Rating.all.select{|rating| rating.user_id == @user.id}.each do |rating|
-        rating.destroy
-      end
-      Comment.all.select{|comment| comment.user_id == @user.id}.each do |comment|
-        comment.destroy
-      end
-      @user.destroy
-      flash[:notice] = "Account deleted."
-      redirect_to root_path
-    else
-      flash[:alert] = "You must log in to delete your account"
-      redirect_to(request.referrer || root_path)
+    authorize @user
+  end
+
+  def update
+  end 
+
+
+  def destroy
+    @user = User.find_by(id: current_user.id)
+    authorize @user
+    Rating.all.select{|rating| rating.user_id == @user.id}.each do |rating|
+      rating.destroy
     end
+    Comment.all.select{|comment| comment.user_id == @user.id}.each do |comment|
+      comment.destroy
+    end
+    @user.destroy
+    flash[:notice] = "Account deleted."
+    redirect_to root_path
   end
 
 

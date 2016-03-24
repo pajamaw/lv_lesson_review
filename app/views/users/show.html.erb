@@ -1,31 +1,37 @@
 <h3>Profile: <%=@user.email%></h3>
 <h4>Status: <%=@user.role%></h3>
 <br />
-
+  <div>
   <h4>All Comments</h4>
     <ol>
-        <% @user.comments.each do |comment|%>
+      <% @user.comments.each do |comment|%>
       <li>Lesson: <%=link_to comment.lesson.parse_title, lesson_path(comment.lesson)%> | 
         <br /> <%=link_to comment.content, lesson_comment_path(comment.lesson, comment)%> | 
         Written on: <%=comment.created_at.strftime('%A, %b %d, %Y')%>
+            <%end%>
+
       </li>
       <br />
       <br />
     </ol>
     <br />
-    <%end%>
-
-  <h4>All Ratings</h4>
+  </div>
+  <div>
+    <h4>All Ratings</h4>
     <ol>
-
-    <%@user.ratings.each do |rating| %>
+      <%@user.ratings.each do |rating| %>
       <li>Lesson: <%=link_to rating.lesson.parse_title, lesson_path(rating.lesson)%> 
-        <ul>Rating: <%=rating.star_rating%> out of 5
-        </ul>       
-        <ul><%=link_to "Details", lesson_rating_path(rating.lesson, rating)%>  Rated on: <%=rating.created_at.strftime('%A, %b %d, %Y')%></ul> 
+         Rating: <%=rating.star_rating%> out of 5      
+        <br> <%=link_to "Details", lesson_rating_path(rating.lesson, rating)%>  Rated on: <%=rating.created_at.strftime('%A, %b %d, %Y')%>
+            <%end%>
+
       </li>
-    <%end%>
-  </ol>
-<br />
-  <%= button_to "Delete Profile and all Traces of Existence", user_path(@user), method: :delete%>
+      <br />
+      <br />
+    </ol>
+    <br />
+  </div>
+  <br />
+
+  <%= button_to "Delete Profile and all Traces of Existence", user_path(@user), method: :delete%><br />
     <%= link_to 'Back', url_for(:back) %>
