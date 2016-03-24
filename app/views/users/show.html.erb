@@ -18,7 +18,7 @@
   </div>
   <div>
     <h4>All Ratings</h4>
-    <h5><%=@lesson.average_rating%> out of 5.0</h5>
+    <h5>Average Rating: <%=@user.average_rating%> out of 5.0</h5>
     <ol>
       <%@user.ratings.each do |rating| %>
       <li>Lesson: <%=link_to rating.lesson.parse_title, lesson_path(rating.lesson)%> 

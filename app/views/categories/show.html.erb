@@ -1,7 +1,7 @@
 <h3><%= @category.title %></h3>
   <% if @category.ratings.count != 0 %>
   <h4> Difficulty Rating - 
-    <%=Rating.average(@category.ratings)%> out of 5</h4>
+    <%=@category.average_rating%> out of 5</h4>
     <%else%>
       <%="This category's lessons have yet to be rated"%></ul>
       <%end%>
