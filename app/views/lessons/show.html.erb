@@ -8,7 +8,7 @@
     <br />
     <%=link_to "Add Rating", new_lesson_rating_path(@lesson)%>
       <%else%>
-        <h5><%=@lesson.average%> out of 5.0</h5>
+        <h5><%=@lesson.average_rating%> out of 5.0</h5>
         <h4><%=link_to "See all Ratings", lesson_ratings_path(@lesson)%></h4>
         <%end%><br />
       </ul><br />

@@ -17,13 +17,13 @@ class Lesson < ActiveRecord::Base
     end
   end
 
-  def average
+  def average_rating
     average = 0
     total = 0
     self.ratings.each do |num|
       total += num.star_rating.to_f
-      end
-      average = total / self.ratings.count
+    end
+    average = total / self.ratings.count
   end
 
 

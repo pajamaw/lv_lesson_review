@@ -25,12 +25,12 @@ class User < ActiveRecord::Base
       self.ratings.where('lesson_id != ?', params[:lesson_id])
     end
 
-  def average
+  def average_rating
     average = 0
     total = 0
     self.ratings.each do |num|
       total += num.star_rating.to_f
-      end
+    end
     average = total / self.ratings.count
   end
 
