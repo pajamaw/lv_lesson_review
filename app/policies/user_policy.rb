@@ -5,7 +5,7 @@ class UserPolicy < ApplicationPolicy
     user.admin?
   end
 
-  def update?
+  def promote?
     user.admin?
   end
 

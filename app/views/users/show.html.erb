@@ -26,12 +26,17 @@
             <%end%>
 
       </li>
-      <br />
-      <br />
     </ol>
     <br />
   </div>
   <br />
+    <%if current_user.admin? %>
+    <h4>Edit User</h4>
+      <%= form_tag(promote_user_path, method: 'post')  do%>
+       Member: <%= radio_button_tag :role, 'member'%> | VIP <%= radio_button_tag :role, 'vip'%> | Admin <%= radio_button_tag :role, 'admin'%><br />
+      <%=submit_tag "Promote/Demote User"%>
+    <%end%>
+    <%end%>
 
   <%= button_to "Delete Profile and all Traces of Existence", user_path(@user), method: :delete%><br />
     <%= link_to 'Back', url_for(:back) %>

@@ -5,10 +5,6 @@ class UsersController <ApplicationController
     @user = User.find_by(id: current_user.id)
     authorize @user
     @users = User.all
-    #else
-     # #flash[:alert] = "Not authorized"
-      #redirect_to(request.referrer || root_path)
-   # end
   end
 
   def show
@@ -26,9 +22,14 @@ class UsersController <ApplicationController
     authorize @user
   end
 
-  def update
+  def promote
+    @user = User.find_by(id: params[:id])
+    authorize @user
+    @user.role = params[:role]
+    @user.save
+    flash[:notice] = "User status updated."
+    redirect_to user_path
   end 
-
 
   def destroy
     @user = User.find_by(id: current_user.id)

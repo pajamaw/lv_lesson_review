@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   end
   resources :ratings
   resources :comments
+  
+  post 'users/:id/promote' => 'users#promote', as: 'promote_user'
   delete '/comments' => 'comments#destroy'
   devise_for :users, :controllers => {:omniauth_callbacks => "callbacks"}
   resources :users
