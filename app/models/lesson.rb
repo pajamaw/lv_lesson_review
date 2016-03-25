@@ -6,8 +6,8 @@ class Lesson < ActiveRecord::Base
   #has_many :ratings, as: :ratable
 
   def parse_title
-    #if self.title.match(/(\-)/)
-      #self.title = self.title.gsub("-", "")######(/^[\w+\s+\w]*/)
+    #if title.match(/(\-)/)
+      #title = self.title.gsub("-", "")######(/^[\w+\s+\w]*/)
     if title.match(/(\d)/) || title.match(/(-)/)
        title.gsub("-", "").match(/^\D+/)
        ##not going to change titles until i know what information i want
@@ -18,12 +18,25 @@ class Lesson < ActiveRecord::Base
   end
 
   def average_rating
-    average = 0
-    total = 0
-    self.ratings.each do |num|
-      total += num.star_rating.to_f
+    if ratings.count != 0
+      average = 0
+      total = 0
+      ratings.each do |num|
+        total += num.star_rating.to_f
+      end
+      average = total / ratings.count
+    else
+      "N/A"
     end
-    average = total / self.ratings.count
+  end
+
+  def self.hardest_lesson
+    all_lessons = Lesson.all
+    rated_lessons = all_lessons.select do |lesson|
+      lesson.ratings.count != 0
+    end
+
+    rated_lessons.sort{|lesson| lesson.average_rating}.first
   end
 
 

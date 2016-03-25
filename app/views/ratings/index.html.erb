@@ -1,5 +1,5 @@
 <h3> <%=link_to @lesson.parse_title, lesson_path(@lesson)%></h3>
-<h4>Average Difficulty: <%=Rating.average(@ratings)%>
+<h4>Average Difficulty: <%=@lesson.average_rating%>
 <br />
 <h5>Based on the input from <%=@ratings.count%> people</h5>
 <ol>
@@ -9,6 +9,6 @@
   <%end%>
 </ol>
 
-<%=link_to "Add Rating", new_lesson_rating_path(@lesson, @rating)%>
+<%=link_to "Add Rating", new_lesson_rating_path(@lesson, @rating)%><br><br>
 
 <%=link_to "Back", lesson_path(@lesson)%>

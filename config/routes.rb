@@ -2,14 +2,14 @@ Rails.application.routes.draw do
   root 'welcome#home'
 
   resources :categories, only: [:show, :index]
-  resources :lessons, only: [:show, :index]
   resources :lessons, only: [:show, :index] do
     resources :comments, only: [:show, :index, :new, :edit]
     resources :ratings, only: [:show, :index, :new, :edit]
   end
   resources :ratings
   resources :comments
-  
+  get '/hardest_lesson', to: 'lessons#hardest_lesson'
+  get '/hardest_category', to: 'categories#hardest_category'
   post 'users/:id/promote' => 'users#promote', as: 'promote_user'
   delete '/comments' => 'comments#destroy'
   devise_for :users, :controllers => {:omniauth_callbacks => "callbacks"}

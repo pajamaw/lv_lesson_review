@@ -4,7 +4,7 @@ class CommentsController < ApplicationController
   
   def new
     if params[:lesson_id] && !Lesson.exists?(params[:lesson_id])
-      flash[:notice] = "Lesson not found."
+      flash[:alert] = "Lesson not found."
       redirect_to lessons_path
     else
       @user = User.find_by(id: current_user)
@@ -23,7 +23,7 @@ class CommentsController < ApplicationController
     if params[:lesson_id]
       lesson = Lesson.find_by(id: params[:lesson_id])
       if lesson.nil?
-        flash[:notice] = "Lesson not found"
+        flash[:alert] = "Lesson not found"
         redirect_to lessons_path
       else
         @comment = lesson.comments.find_by(id: params[:id])
@@ -39,7 +39,7 @@ class CommentsController < ApplicationController
   end
 
   def update
-    @comment = Comment.find_by(id: params[:id])
+    @comment = Comment.find(params[:id])
     authorize @comment
     @comment.update(comment_params)
     if @comment.save

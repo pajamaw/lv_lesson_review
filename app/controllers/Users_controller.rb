@@ -9,10 +9,10 @@ class UsersController <ApplicationController
 
   def show
     if User.find_by(id: params[:id])
-      @user = User.find_by(id: params[:id])
+      @user = User.find(params[:id])
       authorize @user
     else
-      flash[:notice] = "User not found."
+      flash[:alert] = "User not found."
       redirect_to root_path  
     end
   end
@@ -32,14 +32,8 @@ class UsersController <ApplicationController
   end 
 
   def destroy
-    @user = User.find_by(id: current_user.id)
+    @user = User.find(params[:id])
     authorize @user
-    Rating.all.select{|rating| rating.user_id == @user.id}.each do |rating|
-      rating.destroy
-    end
-    Comment.all.select{|comment| comment.user_id == @user.id}.each do |comment|
-      comment.destroy
-    end
     @user.destroy
     flash[:notice] = "Account deleted."
     redirect_to root_path

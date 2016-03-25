@@ -5,6 +5,11 @@ class LessonsController < ApplicationController
   end
 
   def show
-    @lesson = Lesson.find_by(id: params[:id])
+    @lesson = Lesson.find(params[:id])
+  end
+
+  def hardest_lesson
+    @lesson = Lesson.hardest_lesson
+    render template: 'lessons/show'
   end
 end

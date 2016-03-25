@@ -5,12 +5,11 @@ class RatingsController < ApplicationController
   def index
     @lesson = Lesson.find(params[:lesson_id])
     @ratings = @lesson.ratings
-    render template: 'ratings/index'
   end
 
   def new
     if params[:lesson_id] && !Lesson.exists?(params[:lesson_id])
-      flash[:notice] = "Lesson not found."
+      flash[:alert] = "Lesson not found."
       redirect_to lessons_path
     else
       @user = User.find_by(id: current_user)
@@ -29,7 +28,7 @@ class RatingsController < ApplicationController
     if params[:lesson_id]
       lesson = Lesson.find_by(id: params[:lesson_id])
       if lesson.nil?
-        flash[:notice] = "Lesson not found"
+        flash[:alert] = "Lesson not found"
         redirect_to lessons_path
       else
         @rating = lesson.ratings.find_by(id: params[:id])

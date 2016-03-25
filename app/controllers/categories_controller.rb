@@ -5,6 +5,11 @@ class CategoriesController < ApplicationController
   end
 
   def show
-    @category = Category.find_by(id: params[:id])
+    @category = Category.find(params[:id])
+  end
+
+  def hardest_category
+    @category = Category.hardest_category
+    render template: 'categories/show'
   end
 end
