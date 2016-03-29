@@ -38,5 +38,5 @@ Admin:
 
 To get started with this project, run rake db:seed to intialize the scraper which will fill out the lesson and category information from my learn.co profile. (As long as their css doesn't change!)
 
-Please let me know if you have any questions or concerns!
+Please let me know if you have any questions or concerns! --pjpeterww@gmail.com
 
