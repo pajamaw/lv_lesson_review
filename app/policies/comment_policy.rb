@@ -2,7 +2,7 @@ class CommentPolicy <ApplicationPolicy
   attr_reader :user, :record
 
   def create?
-    user.admin? or user.vip? or user.member?
+    user
   end
 
   def update?
