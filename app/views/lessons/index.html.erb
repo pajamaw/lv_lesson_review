@@ -1,11 +1,18 @@
 <h3>Lessons</h3><br>
 <h4>Take me to the:</h4>
+<br>
   <ul>
     <li><%=link_to "Most Difficult Lesson", hardest_lesson_path%></li><br>
   </ul>
 <h4>All Lessons</h4>
-  <ol>
+  <div>
+  <%= page_entries_info @lessons %>
+  <%= paginate @lessons, window: 2 %>
+
   <%@lessons.each do |lesson| %>
-      <li><%= link_to lesson.parse_title, lesson_path(lesson) %></li><br />
+      <p><%= (lesson.id - @first)%>. <%= link_to lesson.parse_title, lesson_path(lesson) %></p><br />
     <%end%>
-  </ol>
+  </div>
+
+  <%= page_entries_info @lessons %>
+  <%= paginate @lessons, window: 2 %>

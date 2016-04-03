@@ -1,7 +1,8 @@
 class LessonsController < ApplicationController
 
   def index
-    @lessons = Lesson.all
+    @first = Lesson.first.id - 1
+    @lessons = Lesson.order(id: :asc).page(params[:page])
   end
 
   def show
