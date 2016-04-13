@@ -5,6 +5,10 @@ class RatingsController < ApplicationController
   def index
     @lesson = Lesson.find(params[:lesson_id])
     @ratings = @lesson.ratings
+     respond_to do |format|
+      format.html {render plain: @ratings}
+      format.json { render json: @ratings}
+    end  
   end
 
   def new
@@ -20,8 +24,10 @@ class RatingsController < ApplicationController
   def create
     @rating = Rating.create(rating_params)
     authorize @rating
-    flash[:notice] = "Rating Added"
-    redirect_to rating_path(@rating)
+    if @rating.save
+      flash[:notice] = "Rating Added"
+      redirect_to lesson_path( @rating.lesson_id)
+    end
   end
 
   def edit
@@ -41,6 +47,10 @@ class RatingsController < ApplicationController
     @lesson = Lesson.find_by(id: params[:lesson_id])
     @user = User.find_by(id: params[:user_id])
     @rating = Rating.find_by(id: params[:id])
+    respond_to do |format|
+      format.html {render plain: @rating}
+      format.json { render json: @rating}
+    end  
   end
 
   def update
@@ -66,7 +76,7 @@ class RatingsController < ApplicationController
   private
 
   def rating_params
-    params.require(:rating).permit(:star_rating, :lesson_id, :user_id)
+    params.permit(:star_rating, :lesson_id, :user_id)
   end
 end
 

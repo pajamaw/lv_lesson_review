@@ -1,5 +1,7 @@
 
 source 'https://rubygems.org'
+
+##gem 'rails-api'
 gem 'kaminari'
 gem 'bootstrap-sass', '~> 3.2.0'
 gem 'autoprefixer-rails'
@@ -10,6 +12,7 @@ gem 'mechanize'
 gem 'nokogiri'
 gem 'devise'
 gem 'omniauth-github'
+gem 'active_model_serializers', '0.9.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.5.2'

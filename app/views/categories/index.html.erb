@@ -1,5 +1,6 @@
 <h3>Categories</h3><br>
 <h4>Take me to the:</h4>
+<br>
   <ul>
     <li><%=link_to "Most Difficult Category", hardest_category_path%></li><br>
   </ul>
@@ -7,6 +8,5 @@
 <ol>
 <% @categories.each do |category| %>
   <li><%= link_to category.title, category_path(category) %></li><br />
-
 <% end %>
 </ol>

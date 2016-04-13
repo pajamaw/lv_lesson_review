@@ -6,6 +6,9 @@ Rails.application.routes.draw do
     resources :comments, only: [:show, :index, :new, :edit]
     resources :ratings, only: [:show, :index, :new, :edit]
   end
+  post '/add_rating' => "ratings#create" 
+  post '/add_comment' => "comments#create"
+
   resources :ratings
   resources :comments
   get '/hardest_lesson', to: 'lessons#hardest_lesson'

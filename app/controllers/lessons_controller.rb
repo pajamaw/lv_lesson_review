@@ -7,6 +7,7 @@ class LessonsController < ApplicationController
 
   def show
     @lesson = Lesson.find(params[:id])
+    @user = current_user
   end
 
   def hardest_lesson

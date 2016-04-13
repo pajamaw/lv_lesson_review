@@ -15,8 +15,10 @@ class CommentsController < ApplicationController
   def create
     @comment = Comment.create(comment_params)
     authorize @comment
-    flash[:notice] = "Comment Added"
-    redirect_to comment_path(@comment)
+    if @comment.save
+      flash[:notice] = "Comment Added"
+      redirect_to lesson_path(@comment.lesson_id)
+    end
   end
 
   def edit
@@ -36,6 +38,10 @@ class CommentsController < ApplicationController
     @lesson = Lesson.find_by(id: params[:lesson_id])
     @user = User.find_by(id: params[:user_id])
     @comment = Comment.find_by(id: params[:id])
+    respond_to do |format|
+      format.html 
+      format.json { render json: @comment}
+    end  
   end
 
   def update
@@ -61,6 +67,6 @@ class CommentsController < ApplicationController
   private
 
   def comment_params
-    params.require(:comment).permit(:content, :lesson_id, :user_id)
+    params.permit(:content, :lesson_id, :user_id)
   end
 end

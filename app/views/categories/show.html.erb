@@ -1,20 +1,24 @@
 <h3><%= @category.title %></h3>
+
   <% if @category.ratings.count != 0 %>
+  
   <h4> Difficulty Rating - 
     <%=@category.average_rating%> out of 5</h4>
     <%else%>
       <%="This category's lessons have yet to be rated"%></ul>
-      <%end%>
+    <%end%>
+
   <h4> Number of User Comments -
   <%=@category.comments.count%>
-  </h4>
-    <br />
-
+  </h4><br/>
+  
   <ol>
 
     <% @category.lessons.each do |lesson| %>
-    <li><%= link_to lesson.parse_title, lesson_path(lesson) %></li><br />
+
+      <li><%= link_to lesson.parse_title, lesson_path(lesson) %></li><br/>
     <% end %>
-    </ol>
+
+  </ol>
     
     <%= link_to 'Back', url_for(:back) %>

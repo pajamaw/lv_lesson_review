@@ -6,11 +6,39 @@
       <%if @lesson.ratings.count == 0%>
     <h5> N/A</h5>
     <br />
-    <%=link_to "Add Rating", new_lesson_rating_path(@lesson)%>
       <%else%>
         <h5><%=@lesson.average_rating%> out of 5.0</h5>
-        <h4><%=link_to "See all Ratings", lesson_ratings_path(@lesson)%></h4>
+      <h4><%=link_to "See all Ratings", lesson_ratings_path(@lesson)%></h4>
         <%end%><br />
+
+        <div class="rating_form">
+           <%= form_tag add_rating_path(@rating), :id => 'rating' do%>
+          | 1 <%= radio_button_tag :star_rating, "1"%> | 2 <%= radio_button_tag :star_rating, "2"%> | 3 <%= radio_button_tag :star_rating, "3"%> | 4 <%= radio_button_tag :star_rating, "4"%> | 5 <%= radio_button_tag :star_rating, "5"%> |
+          <%= hidden_field_tag "lesson_id", @lesson.id %>
+          <%= hidden_field_tag "user_id", @user.id %>
+          <%= submit_tag "Add rating" %>
+
+          <%end%>
+        </div>
+
+        <script type="text/javascript" charset="utf-8">
+          $(function () {
+            $('#rating').submit(function(event){
+              event.preventDefault();
+
+              var values = $(this).serialize();
+
+              var posting = $.post('/ratings', values);
+
+              posting.done(function(data){
+
+              });
+              //alert("it worked!");
+            });
+          });
+        </script>
+
+
       </ul><br />
     </ul>
     </div>
@@ -21,20 +49,77 @@
         <%="There are no comments on this lesson. Be the first one!"%><br />
 
           <%else%>
+
         <% @lesson.comments.each do |comment|%>
           <li>Written on <%=comment.created_at.strftime('%A, %b %d, %Y')%> |  <%=comment.user.email%> |<br /> <%=link_to comment.content, lesson_comment_path(comment.lesson, comment)%></li><br /><br />
          
           <%end%>
           <%end%>
-          <%=link_to "Add a comment", new_lesson_comment_path(@lesson)%>
 
-        <%#= form_tag(new_lesson_comment_path) do %>
-        <%#= text_area_tag :content%>
-        <%#= hidden_field_tag "lesson_id", @lesson.id%>
-        <%#= submit_tag "Add Comment" %>
-          <% #end %>
+<script type="text/javascript" charset="utf-8">
+$(function() {
+    var id = $(this).data("id");
+    $.get("/lessons/" + id + ".json", function(data) {
+       
+       var lesson = data['lesson'];
+       var inventoryText = "<strong>Available</strong>";
+       if(product['inventory'] === 0){
+         inventoryText = "<strong>Sold Out</strong>";
+       }
+       
+       var descriptionText = "<p>" + product['description'] + "</p><p>" + inventoryText + "</p>";
+       $("#product-" + id).html(descriptionText);
+       
+       var ordersAll = product['orders'];
+       var orderList = 'Outstanding Orders <ol class="js-order" data-id="order["id"]">';
+       ordersAll.forEach(function(order) {
+         orderList += "<li>Date: " + order['created_at'];
+         orderList += '</li>Products:<ul>';
+         var products = order['products'];
+         products.forEach(function(productEach) {
+           orderList += "<li>" + productEach['name'] + "</li>";
+         });
+         orderList += '</ul></li>'
+       });
+        orderList += '</ol>';
+       $("#ordered-" + id + "-products").html(orderList);
+      });
+    });
+</script>
+
+
+
+        <%= form_tag add_comment_path(@comment), :id => 'comment' do %>
+        <%= text_area_tag :content%>
+        <%= hidden_field_tag "lesson_id", @lesson.id%>
+        <%= hidden_field_tag "user_id", @user.id %>
+
+        <%= submit_tag "Add Comment" %>
+          <% end %>
+
+          <script type="text/javascript" charset="utf-8">
+          $(function () {
+            var id = $(this).data("id");
+            $('#comment').submit(function(event){
+              event.preventDefault();
+
+              var values = $(this).serialize();
+
+              var posting = $.post('/comments', values);
+              console.log($.get('/lesson/'+id+'.json'))
+              posting.done(function(data){
+
+              });
+              //alert("it worked!");
+            });
+          });
+        </script>
       </ul>
     </div>
       <br />
     <%= link_to 'Back', lessons_path %>
+
+
+
+
 
