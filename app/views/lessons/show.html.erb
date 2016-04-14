@@ -1,16 +1,13 @@
-<h3><%= @lesson.parse_title %></h3>
-          
+<div id="lesson_title"></div>          
   <div>
     <ul>
       
       <h4>Difficulty Rating - </h4>
-      <%if @lesson.ratings.count == 0%>
-    <h5> N/A</h5>
-    <br />
-      <%else%>
-        <h5><%=@lesson.average_rating%> out of 5.0</h5>
+      <div id="average_rating"></div>
+      <div id="rating_number"></div>
+
       <div id="ratingsAll"></div>
-        <%end%><br />
+       <br />
 
         <div class="rating_form">
            <%= form_tag add_rating_path(@rating), :id => 'rating' do%>
@@ -39,84 +36,127 @@
         <%= submit_tag "Add Comment" %>
           <% end %>
 
-      <script type="text/javascript" charset="utf-8">
-          $(function () {
-            var id = $(this).data("id");
-            $('#comment').submit(function(event){
-              event.preventDefault();
-
-              var values = $(this).serialize();
-
-              var posting = $.post('/comments', values);
-   
-              posting.done(function(data){
-
-                var id = window.location.pathname;
-                $.get(id + ".json", function(data) {
-                   var lesson = data['lesson'];
-                   var commentText = "<strong>Comments</strong>";
-
-                   if(lesson['ratings'] === 0){
-                     commentText = "<strong>There are no comments</strong>";
-                   };
-                   var lessonComments = lesson['comments'];
-
-                   var commentList = "Comments <ol class='js-comment' data-id='comment['id']'>";
-                   lessonComments.forEach(function(comment) {
-                    //debugger;
-
-                     commentList += "<li><ul><li>Content: " + comment['content']+"</li>";
-                      commentList += "<li>By: " + comment['user']['email']+"</li>";
-                     commentList += '<li>Commented at: ' + comment['created_at']+"</li>";
-                     commentList += '</ul></li>'
-                   });
-                    commentList += '</ol>';
-                 $("#commentsAll").html(commentList);
-                });
-              });
-              //alert("it worked!");
-            });
-          $('#rating').submit(function(event){
-              event.preventDefault();
-
-              var values = $(this).serialize();
-
-              var posting = $.post('/ratings', values);
-
-              posting.done(function(data){
-                var id = window.location.pathname;
-                $.get(id + ".json", function(data) {
-                   var lesson = data['lesson'];
-                   var ratingText = "<strong>Ratings</strong>";
-
-                   if(lesson['ratings'] === 0){
-                     ratingText = "<strong>There are no ratings</strong>";
-                   };
-                   var lessonRatings = lesson['ratings'];
-
-                   var ratingList = "Ratings <ol class='js-rating' data-id='rating['id']'>";
-                   lessonRatings.forEach(function(rating) {
-                    //debugger;
-
-                     ratingList += "<li><ul><li>Difficulty Rating: " + rating['star_rating'] + " out of 5</li>";
-                     ratingList += "<li>By: " + rating['user']['email'] + "</li>";
-                      ratingList += "<li>Rated at: " + rating['created_at']+"</li>";
-                     ratingList += '</ul></li>'
-                   });
-                    ratingList += '</ol>';
-                 $('#ratingsAll').html(ratingList);
-                });
-              });
-              //alert("it worked!");
-            });
-          });
-        </script>
-
-
-      </ul>
+    </ul>
     </div>
       <br />
     <%= link_to 'Back', lessons_path %>
+
+    <script type="text/javascript" charset="utf-8">
+$(document).ready(function(){
+  populateLesson(id);
+  attachListeners();
+});
+
+function attachListeners(){
+
+  $('#comment').submit(function(event){
+    event.preventDefault();
+
+    var values = $(this).serialize();
+
+    var posting = $.post('/comments', values);
+
+    posting.done(function(data){
+      populateComments(id);
+    });
+    //alert("it worked!");
+  });
+$('#rating').submit(function(event){
+    event.preventDefault();
+
+    var values = $(this).serialize();
+
+    var posting = $.post('/ratings', values);
+
+    posting.done(function(data){
+      populateRatings(id);
+    });
+    //alert("it worked!");
+  });
+};
+
+var id = window.location.pathname;
+
+function populateLesson(id){
+  $.get(id + ".json", function(data) {
+       var lesson = "<h3>" + data['lesson']['title'] + "</h3>";
+        $('#lesson_title').html(lesson);
+      });
+  populateComments(id);
+  populateRatings(id);
+  averageRating(id);
+}
+
+function populateComments(id){
+  $.get(id + ".json", function(data) {
+       var lesson = data['lesson'];
+       var commentText = "<strong>Comments</strong>";
+
+       if(lesson['ratings'] === 0){
+         commentText = "<strong>There are no comments</strong>";
+       };
+       var lessonComments = lesson['comments'];
+
+       var commentList = "Comments <ol class='js-comment' data-id='comment['id']'>";
+       lessonComments.forEach(function(comment) {
+        //debugger;
+
+         commentList += "<li><ul><li>Content: " + comment['content']+"</li>";
+          commentList += "<li>By: " + comment['user']['email']+"</li>";
+         commentList += '<li>Commented at: ' + comment['created_at']+"</li>";
+         commentList += '</ul></li><br/>'
+       });
+        commentList += '</ol>';
+     $("#commentsAll").html(commentList);
+    });
+}
+
+function populateRatings(id){
+  $.get(id + ".json", function(data) {
+     var lesson = data['lesson'];
+     var ratingText = "<strong>Ratings</strong>";
+
+     if(lesson['ratings'] === 0){
+       ratingText = "<strong>There are no ratings</strong>";
+     };
+     var lessonRatings = lesson['ratings'];
+
+     var ratingList = "Ratings <ol class='js-rating' data-id='rating['id']'>";
+     lessonRatings.forEach(function(rating) {
+      //debugger;
+
+       ratingList += "<li><ul><li>Difficulty Rating: " + rating['star_rating'] + " out of 5</li>";
+       ratingList += "<li>By: " + rating['user']['email'] + "</li>";
+        ratingList += "<li>Rated at: " + rating['created_at']+"</li>";
+       ratingList += '</ul></li><br/>'
+     });
+      ratingList += '</ol>';
+   $('#ratingsAll').html(ratingList);
+  });
+  averageRating(id);   
+}
+
+function averageRating(id){
+  $.get(id + ".json", function(data){
+    var lesson = data['lesson'];
+    var lessonRatings = lesson['ratings'];
+    var sum = 0;
+
+    lessonRatings.forEach(function(rating){
+      sum += rating['star_rating'];
+            //debugger;
+
+    })
+     var nbr = lessonRatings.length;
+     var avg = "<h4>" + sum/nbr + " out of 5</h4>";
+
+       $('#average_rating').html(avg);
+       $('#rating_number').html('<h5>Taken from ' + nbr + ' surveys');
+
+  });
+}
+</script>
+
 
 
 
