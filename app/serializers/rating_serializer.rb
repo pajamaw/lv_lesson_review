@@ -1,5 +1,3 @@
 class RatingSerializer < ActiveModel::Serializer
-  attributes :user_id, :lesson_id, :star_rating
-  belongs_to :lesson, serializer: LessonSerializer
-
+  attributes  :lesson_id, :user_id, :star_rating, :created_at, :user
 end

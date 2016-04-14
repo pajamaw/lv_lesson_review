@@ -2,13 +2,14 @@
           
   <div>
     <ul>
+      
       <h4>Difficulty Rating - </h4>
       <%if @lesson.ratings.count == 0%>
     <h5> N/A</h5>
     <br />
       <%else%>
         <h5><%=@lesson.average_rating%> out of 5.0</h5>
-      <h4><%=link_to "See all Ratings", lesson_ratings_path(@lesson)%></h4>
+      <div id="ratingsAll"></div>
         <%end%><br />
 
         <div class="rating_form">
@@ -20,23 +21,6 @@
 
           <%end%>
         </div>
-
-        <script type="text/javascript" charset="utf-8">
-          $(function () {
-            $('#rating').submit(function(event){
-              event.preventDefault();
-
-              var values = $(this).serialize();
-
-              var posting = $.post('/ratings', values);
-
-              posting.done(function(data){
-
-              });
-              //alert("it worked!");
-            });
-          });
-        </script>
 
 
       </ul><br />
@@ -56,39 +40,6 @@
           <%end%>
           <%end%>
 
-<script type="text/javascript" charset="utf-8">
-$(function() {
-    var id = $(this).data("id");
-    $.get("/lessons/" + id + ".json", function(data) {
-       
-       var lesson = data['lesson'];
-       var inventoryText = "<strong>Available</strong>";
-       if(product['inventory'] === 0){
-         inventoryText = "<strong>Sold Out</strong>";
-       }
-       
-       var descriptionText = "<p>" + product['description'] + "</p><p>" + inventoryText + "</p>";
-       $("#product-" + id).html(descriptionText);
-       
-       var ordersAll = product['orders'];
-       var orderList = 'Outstanding Orders <ol class="js-order" data-id="order["id"]">';
-       ordersAll.forEach(function(order) {
-         orderList += "<li>Date: " + order['created_at'];
-         orderList += '</li>Products:<ul>';
-         var products = order['products'];
-         products.forEach(function(productEach) {
-           orderList += "<li>" + productEach['name'] + "</li>";
-         });
-         orderList += '</ul></li>'
-       });
-        orderList += '</ol>';
-       $("#ordered-" + id + "-products").html(orderList);
-      });
-    });
-</script>
-
-
-
         <%= form_tag add_comment_path(@comment), :id => 'comment' do %>
         <%= text_area_tag :content%>
         <%= hidden_field_tag "lesson_id", @lesson.id%>
@@ -96,6 +47,7 @@ $(function() {
 
         <%= submit_tag "Add Comment" %>
           <% end %>
+      <div id="commentsAll"></div>
 
           <script type="text/javascript" charset="utf-8">
           $(function () {
@@ -106,14 +58,69 @@ $(function() {
               var values = $(this).serialize();
 
               var posting = $.post('/comments', values);
-              console.log($.get('/lesson/'+id+'.json'))
+   
               posting.done(function(data){
 
+                var id = window.location.pathname;
+                $.get(id + ".json", function(data) {
+                   var lesson = data['lesson'];
+                   var commentText = "<strong>Comments</strong>";
+
+                   if(lesson['ratings'] === 0){
+                     commentText = "<strong>There are no comments</strong>";
+                   };
+                   var lessonComments = lesson['comments'];
+
+                   var commentList = "Comments <ol class='js-comment' data-id='comment['id']'>";
+                   lessonComments.forEach(function(comment) {
+                    //debugger;
+                     commentList += '<li><ul><li>Date: ' + comment['created_at'];
+                     commentList += "</li><li>Content: " + comment['content']+"</li>";
+                     commentList += "<li>By: " + comment['user']['email']+"</li>";
+                     commentList += '</ul></li>'
+                   });
+                    commentList += '</ol>';
+                 $("#commentsAll").html(commentList);
+                });
+              });
+              //alert("it worked!");
+            });
+          $('#rating').submit(function(event){
+              event.preventDefault();
+
+              var values = $(this).serialize();
+
+              var posting = $.post('/ratings', values);
+
+              posting.done(function(data){
+                var id = window.location.pathname;
+                $.get(id + ".json", function(data) {
+                   var lesson = data['lesson'];
+                   var ratingText = "<strong>Ratings</strong>";
+
+                   if(lesson['ratings'] === 0){
+                     ratingText = "<strong>There are no ratings</strong>";
+                   };
+                   var lessonRatings = lesson['ratings'];
+
+                   var ratingList = "Ratings <ol class='js-rating' data-id='rating['id']'>";
+                   lessonRatings.forEach(function(rating) {
+                    //debugger;
+                     ratingList += '<li><ul><li>Date: ' + rating['created_at'];
+                     ratingList += "</li><li>Difficulty Rating: " + rating['star_rating'] + "out of 5</li>";
+                     ratingList += "<li>By: " + rating['user']['email'] + "out of 5</li>";
+                     ratingList += '</ul></li>'
+                   });
+                    ratingList += '</ol>';
+                 $("#ratingsAll").html(ratingList);
+                });
               });
               //alert("it worked!");
             });
           });
         </script>
+
+
       </ul>
     </div>
       <br />
