@@ -5,43 +5,47 @@
       <h4>Difficulty Rating - </h4>
       <div id="average_rating"></div>
       <div id="rating_number"></div>
-
-      <div id="ratingsAll"></div>
-       <br />
-
-        <div class="rating_form">
-           <%= form_tag add_rating_path(@rating), :id => 'rating' do%>
-          | 1 <%= radio_button_tag :star_rating, "1"%> | 2 <%= radio_button_tag :star_rating, "2"%> | 3 <%= radio_button_tag :star_rating, "3"%> | 4 <%= radio_button_tag :star_rating, "4"%> | 5 <%= radio_button_tag :star_rating, "5"%> |
+      
+       <button value="add_rating" id="show_rating_form">Show/Hide Rating Form</button>
+       <button id="show_ratings">Show/Hide Ratings</button>
+       <br/>
+       <br/>
+           <%= form_tag add_rating_path(@rating), :id => 'rating_form' do%>
+           1 <%= radio_button_tag :star_rating, "1"%> | 2 <%= radio_button_tag :star_rating, "2"%> | 3 <%= radio_button_tag :star_rating, "3"%> | 4 <%= radio_button_tag :star_rating, "4"%> | 5 <%= radio_button_tag :star_rating, "5"%> 
           <%= hidden_field_tag "lesson_id", @lesson.id %>
           <%= hidden_field_tag "user_id", @user.id %>
-          <%= submit_tag "Add rating" %>
+          <%= submit_tag "Submit" %>
 
           <%end%>
-        </div>
+      <br/>
+      <div id="ratingsAll"></div>
 
 
-      </ul><br />
+      </ul><br/>
     </ul>
     </div>
     <div>
-      <ul>
-      <div id="commentsAll"></div>
+       <ul>
+       <button value="show_rating" id="show_comment_form">Show/Hide Comment Form</button>
+       <button id="show_comments">Show/Hide Comments</button>
+       <br/>
 
-
-        <%= form_tag add_comment_path(@comment), :id => 'comment' do %>
+        <%= form_tag add_comment_path(@comment), :id => 'comment_form' do %>
         <%= text_area_tag :content%>
         <%= hidden_field_tag "lesson_id", @lesson.id%>
         <%= hidden_field_tag "user_id", @user.id %>
 
         <%= submit_tag "Add Comment" %>
           <% end %>
+      <br/>
+      <div id="commentsAll"></div>
 
     </ul>
     </div>
       <br />
     <%= link_to 'Back', lessons_path %>
 
-    <script type="text/javascript" charset="utf-8">
+<script type="text/javascript" charset="utf-8">
 $(document).ready(function(){
   populateLesson(id);
   attachListeners();
@@ -49,7 +53,7 @@ $(document).ready(function(){
 
 function attachListeners(){
 
-  $('#comment').submit(function(event){
+  $('#comment_form').submit(function(event){
     event.preventDefault();
 
     var values = $(this).serialize();
@@ -61,7 +65,7 @@ function attachListeners(){
     });
     //alert("it worked!");
   });
-$('#rating').submit(function(event){
+  $('#rating_form').submit(function(event){
     event.preventDefault();
 
     var values = $(this).serialize();
@@ -73,6 +77,32 @@ $('#rating').submit(function(event){
     });
     //alert("it worked!");
   });
+  $("#commentsAll").hide();
+
+  $('#show_comments').click(function(){
+    $("#commentsAll").toggle();
+  });
+
+  //$('#comment_form').hide();
+
+  $('#show_comment_form').click(function(event){
+    $("#comment_form").toggle();
+    event.preventDefault();
+  });
+
+  $("#ratingsAll").hide();
+
+  $('#show_ratings').click(function(){
+    $("#ratingsAll").toggle();
+  });
+
+  //$('#rating_form').hide();
+
+  $('#show_rating_form').click(function(event){
+    $("#rating_form").toggle();
+    event.preventDefault();
+  });
+
 };
 
 var id = window.location.pathname;
