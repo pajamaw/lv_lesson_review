@@ -22,7 +22,7 @@ class RatingsController < ApplicationController
   end
 
   def create
-    @rating = Rating.create(rating_params)
+    @rating = Rating.create(user_id: params[:user_id], lesson_id: params[:lesson_id], star_rating: params[:star_rating])
     authorize @rating
     if @rating.save
       flash[:notice] = "Rating Added"
@@ -59,7 +59,7 @@ class RatingsController < ApplicationController
     @rating.update(rating_params)
     if @rating.save
       flash[:notice] = "Rating Updated"
-      redirect_to rating_path(@rating)
+      redirect_to lesson_path(@rating.lesson_id)
     else
       render :edit
     end
@@ -76,7 +76,7 @@ class RatingsController < ApplicationController
   private
 
   def rating_params
-    params.permit(:star_rating, :lesson_id, :user_id)
+    params.require(:rating).permit(:star_rating, :lesson_id, :user_id)
   end
 end
 

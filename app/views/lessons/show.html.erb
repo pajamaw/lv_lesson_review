@@ -79,8 +79,9 @@ var id = window.location.pathname;
 
 function populateLesson(id){
   $.get(id + ".json", function(data) {
-       var lesson = "<h3>" + data['lesson']['title'] + "</h3>";
-        $('#lesson_title').html(lesson);
+       var lesson_title =data['lesson']['title'];
+
+      $('#lesson_title').html( "<h3>" + parseTitle(lesson_title) + "</h3>");
       });
   populateComments(id);
   populateRatings(id);
@@ -99,11 +100,10 @@ function populateComments(id){
 
        var commentList = "Comments <ol class='js-comment' data-id='comment['id']'>";
        lessonComments.forEach(function(comment) {
-        //debugger;
 
-         commentList += "<li><ul><li>Content: " + comment['content']+"</li>";
-          commentList += "<li>By: " + comment['user']['email']+"</li>";
-         commentList += '<li>Commented at: ' + comment['created_at']+"</li>";
+         commentList += "<li><ul><li>Content: <a href='/lessons/" + comment['lesson_id'] + "/comments/" + comment['id'] + "/edit'>" + comment['content']+"</a></li>";
+          commentList += "<li>By: <a href='/users/" + comment['user_id'] + "'>" + comment['user']['email']+"</a></li>";
+         commentList += '<li>Commented at: ' + comment['created_at'] +"</li>";
          commentList += '</ul></li><br/>'
        });
         commentList += '</ol>';
@@ -125,8 +125,8 @@ function populateRatings(id){
      lessonRatings.forEach(function(rating) {
       //debugger;
 
-       ratingList += "<li><ul><li>Difficulty Rating: " + rating['star_rating'] + " out of 5</li>";
-       ratingList += "<li>By: " + rating['user']['email'] + "</li>";
+       ratingList += "<li><ul><li>Difficulty Rating: <a href='/lessons/" + rating['lesson_id'] + "/ratings/" + rating['id'] +  "/edit'>" + rating['star_rating'] + " out of 5</a></li>";
+       ratingList += "<li>By: <a href='/users/" + rating['user_id'] + "'>" + rating['user']['email'] + "</a></li>";
         ratingList += "<li>Rated at: " + rating['created_at']+"</li>";
        ratingList += '</ul></li><br/>'
      });
@@ -145,7 +145,6 @@ function averageRating(id){
     lessonRatings.forEach(function(rating){
       sum += rating['star_rating'];
             //debugger;
-
     })
      var nbr = lessonRatings.length;
      var avg = "<h4>" + sum/nbr + " out of 5</h4>";
@@ -155,6 +154,14 @@ function averageRating(id){
 
   });
 }
+
+function parseTitle(title){
+  if( title.match(/(\d)/) || title.match(/(-)/) )  {
+    return title.replace("-", "").match(/^\D+/)
+  }else{
+    return title;
+  };
+};
 </script>
 
 
