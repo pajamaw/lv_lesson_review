@@ -1,15 +1,7 @@
 class RatingsController < ApplicationController
   before_action :require_login
-  skip_before_action :require_login, only: [:index, :show]
+  skip_before_action :require_login, only: [:show]
 
-  def index
-    @lesson = Lesson.find(params[:lesson_id])
-    @ratings = @lesson.ratings
-     respond_to do |format|
-      format.html {render plain: @ratings}
-      format.json { render json: @ratings}
-    end  
-  end
 
   def new
     if params[:lesson_id] && !Lesson.exists?(params[:lesson_id])
@@ -48,7 +40,6 @@ class RatingsController < ApplicationController
     @user = User.find_by(id: params[:user_id])
     @rating = Rating.find_by(id: params[:id])
     respond_to do |format|
-      format.html {render plain: @rating}
       format.json { render json: @rating}
     end  
   end

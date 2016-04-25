@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
   before_action :require_login
-  skip_before_action :require_login, only: [:index, :show]  
+  skip_before_action :require_login, only: [:show]  
   
   def new
     if params[:lesson_id] && !Lesson.exists?(params[:lesson_id])
@@ -39,7 +39,6 @@ class CommentsController < ApplicationController
     @user = User.find_by(id: params[:user_id])
     @comment = Comment.find_by(id: params[:id])
     respond_to do |format|
-      format.html {render plain: @comment}
       format.json { render json: @comment}
     end  
   end

@@ -1,7 +1,7 @@
 <div id="lesson_title"></div>          
   <div>
     <ul>
-      
+        <button value="next_lesson" id="next_lesson">Next Lesson</button>
       <h4>Difficulty Rating - </h4>
       <div id="average_rating"></div>
       <div id="rating_number"></div>
@@ -26,10 +26,10 @@
     </div>
     <div>
        <ul>
-       <button value="show_rating" id="show_comment_form">Show/Hide Comment Form</button>
-       <button id="show_comments">Show/Hide Comments</button>
+       <button id="show_comment_form">Show/Hide Comment Form</button>
+       <button value "Comments" id="show_comments">Comments</button>
        <br/>
-
+       <br/>
         <%= form_tag add_comment_path(@comment), :id => 'comment_form' do %>
         <%= text_area_tag :content%>
         <%= hidden_field_tag "lesson_id", @lesson.id%>
@@ -49,7 +49,9 @@
 $(document).ready(function(){
   populateLesson(id);
   attachListeners();
+  debugger;
 });
+
 
 function attachListeners(){
 
@@ -62,8 +64,9 @@ function attachListeners(){
 
     posting.done(function(data){
       populateComments(id);
+      alert("Comment Submitted.")
     });
-    //alert("it worked!");
+    this.reset();
   });
   $('#rating_form').submit(function(event){
     event.preventDefault();
@@ -74,8 +77,10 @@ function attachListeners(){
 
     posting.done(function(data){
       populateRatings(id);
+      alert("Rating Submitted.")
+
     });
-    //alert("it worked!");
+    this.reset();
   });
   $("#commentsAll").hide();
 
@@ -87,7 +92,6 @@ function attachListeners(){
 
   $('#show_comment_form').click(function(event){
     $("#comment_form").toggle();
-    event.preventDefault();
   });
 
   $("#ratingsAll").hide();
@@ -100,16 +104,33 @@ function attachListeners(){
 
   $('#show_rating_form').click(function(event){
     $("#rating_form").toggle();
-    event.preventDefault();
   });
 
+  $('#next_lesson').click(function(event){
+
+    populateNextLesson(next_lesson_id);
+
+  });
 };
 
 var id = window.location.pathname;
+var splitted_lesson_id = id.split("/");
+var next_lesson_id = (parseInt(splitted_lesson_id[splitted_lesson_id.length-1]) + 1).toString();
 
+function populateNextLesson(next_lesson_id){
+  $.get(next_lesson_id + ".json", function(data) {
+       var lesson_title = data['lesson']['title'];
+
+      $('#lesson_title').html( "<h3>" + parseTitle(lesson_title) + "</h3>");
+      });
+  populateComments(next_lesson_id);
+  populateRatings(next_lesson_id);
+  averageRating(next_lesson_id);
+  debugger;
+}
 function populateLesson(id){
   $.get(id + ".json", function(data) {
-       var lesson_title =data['lesson']['title'];
+       var lesson_title = data['lesson']['title'];
 
       $('#lesson_title').html( "<h3>" + parseTitle(lesson_title) + "</h3>");
       });
@@ -123,7 +144,7 @@ function populateComments(id){
        var lesson = data['lesson'];
        var commentText = "<strong>Comments</strong>";
 
-       if(lesson['ratings'] === 0){
+       if(lesson['comments'] === 0){
          commentText = "<strong>There are no comments</strong>";
        };
        var lessonComments = lesson['comments'];
